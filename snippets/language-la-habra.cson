@@ -1,0 +1,142 @@
+'.source.clojure':
+
+  # FULL ITEMS
+  'atom':
+    'prefix': 'atom'
+    'body': """
+      (def ${1:name}
+        (->>
+          sh${2:shape}
+          ${3:style}
+          ${4:anim}
+          (draw)
+          (atom)))
+      """
+
+  # HELPERS
+  'anim':
+    'prefix': 'anim'
+    'body': '(anim "${1:name}" "${2:dur}" "${3:infinite}")'
+
+  'background lines':
+    'prefix': 'lines'
+    'body': '(gen-bg-lines ${1:color} (mod frame ${2:number}))'
+
+  'freakout':
+    'prefix': 'freakout'
+    'body': """
+      (when (nth-frame ${1:frame} frame)
+        (freak-out ${2:@width}
+                   ${3:@height}
+                   ${4:r}
+                   ${5:num}
+                   ${6:color}))
+      """
+
+  'half-width':
+    'prefix': 'half-width'
+    'body': '(* 0.5 @width)'
+
+  'half-height':
+    'prefix': 'half-height'
+    'body': '(* 0.5 @height)'
+    
+  'stroke':
+    'prefix': 'stroke'
+    'body': """
+      (style {:stroke ${1:color} 
+              :stroke-width ${2:width} 
+              :stroke-dasharray ${3:length} 
+              :stroke-dashoffset ${3:length}})
+    """
+
+  'style':
+    'prefix': 'style'
+    'body': '(style {${1:symbol} ${2:string}})'
+
+  'transform-origin':
+    'prefix': 'to'
+    'body': ':transform-origin "center"'
+
+  'translate':
+    'prefix': 'translate'
+    'body': '"translate(${1:x}px, ${2:y}px)"'
+    
+  'translate-center':
+    'prefix': 'tc'
+    'body': '(str "translate(" 40 "vw " 40 "vh)")'
+    
+
+  # CIRCLES
+  'circle full':
+    'prefix': 'circle'
+    'body': """
+      (->>
+        (gen-circ ${1:color} ${2:x} ${3:y} ${4:r})
+        (draw)
+        (when (nth-frame ${5:4} frame)))
+      """
+
+  'solid circle short':
+    'prefix': 'shcircle'
+    'body': '(gen-circ ${1:color} ${2:x} ${3:y} ${4:r})'
+    
+  # LINES
+  'line full':
+    'prefix': 'line'
+    'body': """
+      (->>
+        (gen-line [${1:first-point}] [${2:second-point}] ${3:color} ${4:width})
+        (draw)
+        (when (nth-frame ${5:4} frame)))
+      """
+    
+  # POLYGONS (MANUAL)
+  'poly full':
+    'prefix': 'poly'
+    'body': """
+      (->>
+        (gen-poly ${1:color} [${2:points}])
+        (draw)
+        (when (nth-frame ${6:4} frame)))
+      """
+
+  # RECTS
+  'rect full':
+    'prefix': 'rect'
+    'body': """
+      (->>
+        (gen-rect ${1:color} ${2:x} ${3:y} ${4:w} ${5:h})
+        (draw)
+        (when (nth-frame ${6:4} frame)))
+      """
+
+
+  # SHAPES
+  'shape full':
+    'prefix': 'shape'
+    'body': """
+      (->>
+        (gen-shape ${1:color} ${2:shape})
+          (style {:transform "translate(${3:x}px, ${4:y}px) scale(${5:scale})"})
+          (draw)
+          (when (nth-frame ${6:4} frame)))
+      """
+
+  'shape short':
+    'prefix': 'shshape'
+    'body': '(gen-shape {1:color} ${2:shape})'
+
+  # GRID
+  'grid group':
+    'prefix': 'grid'
+    'body': """
+      (->>
+        (gen-grid
+          ${1:cols} ${2:rows}
+          {:col ${3:offset} :row ${4:offset}}
+          (gen-rect ${5:color} ${6:x} ${7:y} ${8:width} ${9:height})) 
+         (map #(style {:opacity .5} %)) 
+         (map draw) 
+         (when (nth-frame ${10:num} frame)))
+    """
