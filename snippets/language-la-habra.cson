@@ -129,7 +129,7 @@
 
   # GRID
   'grid group':
-    'prefix': 'grid'
+    'prefix': 'grid-group'
     'body': """
       (->>
         (gen-grid
@@ -139,4 +139,24 @@
          (map #(style {:opacity .5} %)) 
          (map draw) 
          (when (nth-frame ${10:num} frame)))
+    """
+    
+  'line grid':
+    'prefix': 'grid-line'
+    'body': """
+    (gen-line-grid ${1:color} ${2:stroke-width} 
+      ${3:cols} ${5:rows} 
+      {:col ${6:-offset} :row ${7:-offset}})
+    """
+    
+  'rows':
+    'prefix': 'rows'
+    'body': """
+      (gen-rows ${1:color} ${2:stroke-width} ${3:num} ${4:offset})
+    """
+    
+  'cols':
+    'prefix': 'cols'
+    'body': """
+      (gen-cols ${1:color} ${2:stroke-width} ${3:num} ${4:offset})
     """
