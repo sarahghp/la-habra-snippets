@@ -109,7 +109,7 @@
        (when (nth-frame ${5:4} frame)))
       """
 
-  'solid circle short':
+  'circle short':
     'prefix': 'shcircle'
     'body': '(gen-circ ${1:color} ${2:x} ${3:y} ${4:r})'
 
@@ -140,6 +140,10 @@
        (when (nth-frame ${5:4} frame)))
       """
 
+  'line short':
+    'prefix': 'shline'
+    'body': '(gen-line [${1:first-point}] [${2:second-point}] ${3:color} ${4:width})'
+
   # POLYGONS (MANUAL)
   'poly':
     'prefix': 'po'
@@ -165,6 +169,10 @@
        (draw)
        (when (nth-frame ${6:4} frame)))
       """
+
+  'poly short':
+    'prefix': 'shpoly'
+    'body': '(gen-poly ${1:color} [${2:points}])'
 
   # RECTS
   'rect':
@@ -192,6 +200,10 @@
        (draw)
        (when (nth-frame ${6:4} frame)))
       """
+
+  'rect short':
+    'prefix': 'shrect'
+    'body': '(gen-rect ${1:color} ${2:x} ${3:y} ${4:w} ${5:h})'
 
   # SHAPES
   'shape':
@@ -235,10 +247,12 @@
        (gen-grid
          ${1:cols} ${2:rows}
          {:col ${3:offset} :row ${4:offset}}
-         (gen-rect ${5:color} ${6:x} ${7:y} ${8:width} ${9:height}))
-         (map #(style {:opacity .5} %))
+         (->>
+          sh${5:shorthand}))
+         (map #(style ${6:styles} %))
+         (map #(anim ${7:animations} %))
          (map draw)
-         (when (nth-frame ${10:num} frame)))
+         (map #(gen-group {:style {:transform-origin "center" }} %)))
     """
 
   'line grid':
