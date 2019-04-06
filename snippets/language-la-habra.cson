@@ -6,11 +6,8 @@
     'body': """
       (def ${1:name}
         (->>
-          sh${2:shape}
-          ${3:style}
-          ${4:anim}
-          (draw)
-          (atom)))
+         ${2:guts}
+         (atom)))
       """
 
   # HELPERS
@@ -23,7 +20,7 @@
     'body': '(gen-bg-lines ${1:color} (mod frame ${2:number}))'
 
   'freakout':
-    'prefix': 'freakout'
+    'prefix': 'freak'
     'body': """
       (when (nth-frame ${1:frame} frame)
         (freak-out ${2:@width}
@@ -33,6 +30,21 @@
                    ${6:color}))
       """
 
+  'new-freakout':
+    'prefix': 'freako'
+    'body': '(new-freakout ${1:max-x} ${2:max-y} ${3:scale} ${4:num} "${5:name}")'
+
+
+  'map-index':
+    'prefix': 'mapin'
+    'body': """
+      (map-indexed
+       (fn [idx ${1:item}]
+         ${2:body})
+       (take ${3:num}
+             (repeatedly #(rand-nth [${4:items}]))))
+    """
+
   'half-width':
     'prefix': 'half-width'
     'body': '(* 0.5 @width)'
@@ -40,18 +52,18 @@
   'half-height':
     'prefix': 'half-height'
     'body': '(* 0.5 @height)'
-    
+
   'stroke':
     'prefix': 'stroke'
     'body': """
-      (style {:stroke ${1:color} 
-              :stroke-width ${2:width} 
-              :stroke-dasharray ${3:length} 
+      (style {:stroke ${1:color}
+              :stroke-width ${2:width}
+              :stroke-dasharray ${3:length}
               :stroke-dashoffset ${3:length}})
     """
 
   'style':
-    'prefix': 'style'
+    'prefix': 'st'
     'body': '(style {${1:symbol} ${2:string}})'
 
   'transform-origin':
@@ -60,67 +72,155 @@
 
   'translate':
     'prefix': 'translate'
-    'body': '"translate(${1:x}px, ${2:y}px)"'
-    
+    'body': '"translate(${1:x}vh, ${2:y}vh)"'
+
   'translate-center':
     'prefix': 'tc'
     'body': '(str "translate(" 40 "vw " 40 "vh)")'
-    
+
+  'when':
+    'prefix': 'when'
+    'body': '(when (nth-frame ${1:4} frame))'
 
   # CIRCLES
-  'circle full':
-    'prefix': 'circle'
+  'circle':
+    'prefix': 'cir'
     'body': """
       (->>
-        (gen-circ ${1:color} ${2:x} ${3:y} ${4:r})
-        (draw)
-        (when (nth-frame ${5:4} frame)))
+       (gen-circ ${1:color} ${2:x} ${3:y} ${4:r})
+       (draw))
+      """
+
+  'circle atom':
+    'prefix': 'circlea'
+    'body': """
+      (->>
+       (gen-circ ${1:color} ${2:x} ${3:y} ${4:r})
+       (draw)
+       (atom))
+      """
+
+  'circle when':
+    'prefix': 'circ'
+    'body': """
+      (->>
+       (gen-circ ${1:color} ${2:x} ${3:y} ${4:r})
+       (draw)
+       (when (nth-frame ${5:4} frame)))
       """
 
   'solid circle short':
     'prefix': 'shcircle'
     'body': '(gen-circ ${1:color} ${2:x} ${3:y} ${4:r})'
-    
+
   # LINES
-  'line full':
+  'line':
+    'prefix': 'li'
+    'body': """
+      (->>
+       (gen-line [${1:first-point}] [${2:second-point}] ${3:color} ${4:width})
+       (draw))
+      """
+
+  'line atom':
+    'prefix': 'linea'
+    'body': """
+      (->>
+       (gen-line [${1:first-point}] [${2:second-point}] ${3:color} ${4:width})
+       (draw)
+       (atom))
+      """
+
+  'line when':
     'prefix': 'line'
     'body': """
       (->>
-        (gen-line [${1:first-point}] [${2:second-point}] ${3:color} ${4:width})
-        (draw)
-        (when (nth-frame ${5:4} frame)))
+       (gen-line [${1:first-point}] [${2:second-point}] ${3:color} ${4:width})
+       (draw)
+       (when (nth-frame ${5:4} frame)))
       """
-    
+
   # POLYGONS (MANUAL)
-  'poly full':
+  'poly':
+    'prefix': 'po'
+    'body': """
+      (->>
+       (gen-poly ${1:color} [${2:points}])
+       (draw))
+      """
+  'poly atom':
+      'prefix': 'polya'
+      'body': """
+        (->>
+         (gen-poly ${1:color} [${2:points}])
+         (draw)
+         (atom))
+        """
+
+  'poly when':
     'prefix': 'poly'
     'body': """
       (->>
-        (gen-poly ${1:color} [${2:points}])
-        (draw)
-        (when (nth-frame ${6:4} frame)))
+       (gen-poly ${1:color} [${2:points}])
+       (draw)
+       (when (nth-frame ${6:4} frame)))
       """
 
   # RECTS
-  'rect full':
+  'rect':
+    'prefix': 'rec'
+    'body': """
+      (->>
+       (gen-rect ${1:color} ${2:x} ${3:y} ${4:w} ${5:h})
+       (draw))
+      """
+
+  'rect atom':
+      'prefix': 'recta'
+      'body': """
+        (->>
+         (gen-rect ${1:color} ${2:x} ${3:y} ${4:w} ${5:h})
+         (draw)
+         (atom))
+        """
+
+  'rect when':
     'prefix': 'rect'
     'body': """
       (->>
-        (gen-rect ${1:color} ${2:x} ${3:y} ${4:w} ${5:h})
-        (draw)
-        (when (nth-frame ${6:4} frame)))
+       (gen-rect ${1:color} ${2:x} ${3:y} ${4:w} ${5:h})
+       (draw)
+       (when (nth-frame ${6:4} frame)))
       """
 
-
   # SHAPES
-  'shape full':
+  'shape':
+    'prefix': 'sha'
+    'body': """
+      (->>
+       (gen-shape ${1:color} ${2:shape})
+       (style {:transform "translate(${3:x}vw, ${4:y}vh) scale(${5:scale})"})
+       (draw))
+      """
+
+  'shape atom':
+    'prefix': 'shapea'
+    'body': """
+      (->>
+       (gen-shape ${1:color} ${2:shape})
+       (style {:transform "translate(${3:x}vw, ${4:y}vh) scale(${5:scale})"})
+       (draw)
+       (atom))
+      """
+
+  'shape when':
     'prefix': 'shape'
     'body': """
       (->>
-        (gen-shape ${1:color} ${2:shape})
-          (style {:transform "translate(${3:x}px, ${4:y}px) scale(${5:scale})"})
-          (draw)
-          (when (nth-frame ${6:4} frame)))
+       (gen-shape ${1:color} ${2:shape})
+       (style {:transform "translate(${3:x}vw, ${4:y}vh) scale(${5:scale})"})
+       (draw)
+       (when (nth-frame ${6:4} frame)))
       """
 
   'shape short':
@@ -132,29 +232,29 @@
     'prefix': 'grid-group'
     'body': """
       (->>
-        (gen-grid
-          ${1:cols} ${2:rows}
-          {:col ${3:offset} :row ${4:offset}}
-          (gen-rect ${5:color} ${6:x} ${7:y} ${8:width} ${9:height})) 
-         (map #(style {:opacity .5} %)) 
-         (map draw) 
+       (gen-grid
+         ${1:cols} ${2:rows}
+         {:col ${3:offset} :row ${4:offset}}
+         (gen-rect ${5:color} ${6:x} ${7:y} ${8:width} ${9:height}))
+         (map #(style {:opacity .5} %))
+         (map draw)
          (when (nth-frame ${10:num} frame)))
     """
-    
+
   'line grid':
     'prefix': 'grid-line'
     'body': """
-    (gen-line-grid ${1:color} ${2:stroke-width} 
-      ${3:cols} ${5:rows} 
+    (gen-line-grid ${1:color} ${2:stroke-width}
+      ${3:cols} ${5:rows}
       {:col ${6:-offset} :row ${7:-offset}})
     """
-    
+
   'rows':
     'prefix': 'rows'
     'body': """
       (gen-rows ${1:color} ${2:stroke-width} ${3:num} ${4:offset})
     """
-    
+
   'cols':
     'prefix': 'cols'
     'body': """
